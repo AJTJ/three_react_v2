@@ -1,56 +1,60 @@
-import React, {useState, useEffect, useRef} from "react";
-import { Canvas, useFrame } from '@react-three/fiber'
+import React from "react";
+import * as THREE from "three";
+// import React3 from 'react-three-renderer';
+// import OBJLoader from 'three-obj-loader';
 
-const Shape = ({sizeValue: sizeValueImport,
-	color: colorImport,
-	vertices: verticesImport,
-	lightsColor: lightsColorImport,
-	middleBulbLum: middleBulbLumImport,
-	topBulbLum: topBulbLumImport,
-	bottomBulbLum: bottomBulbLumImport,}) => {
-  
+class Shape extends React.Component {
+  constructor() {
+    super();
 
-    const [sizeValue, setSizeValue] = useState(5);
-    const [color, setColor] = useState("red");
-    const [lightsColor, setLightsColor] = useState("white");
+    this.state = {
+      sizeValue: 5,
+      color: "red",
+      lightsColor: "white",
+      vertices: 0,
+      shapeRotationX: 0,
+      shapeRotationY: 0,
+      middleBulbDistance: 0,
+      bottomBulbDistance: 0,
+      topBulbDistance: 0,
 
-		const [vertices, setVertices] = useState(0)
-		const [shapeRotationX, setShapeRotationX] = useState(0)
-		const [shapeRotationY, setShapeRotationY] = useState(0)
-		const [middleBulbDistance, setmiddleBulbDistance] = useState(0)
-		const [topBulbDistance, setTopBulbDistance] = useState(0)
-		
-		const [topBulbspeed, setTopBulbSpeed] = useState(0.004)
-		const [middleBulbSpeed, setMiddleBulbSpeed] = useState(0.003)
-		const [bottomBulbSpeed, setBottomBulbSpeed] = useState(0.005)
+      middleBulbSpeed: 0.004,
+      topBulbSpeed: 0.003,
+      bottomBulbSpeed: 0.005,
+      middleBulbLum: 300,
+      topBulbLum: 300,
+      bottomBulbLum: 300,
+    };
 
-		const [topBulbLum, setTopBulbLum] = useState(300)
-		const [middleBulbLum, setMiddleBulbLum] = useState(300)
-		const [bottomBulbLum, setBottomBulbLum] = useState(300)
+    this.createObject = this.createObject.bind(this);
+    this.start = this.start.bind(this);
+    this.stop = this.stop.bind(this);
+    this.animate = this.animate.bind(this);
+    this.renderScene = this.renderScene.bind(this);
+  }
 
-	
-  // componentDidMount() {
-  //   const renderer = new THREE.WebGLRenderer();
-  //   document.body.appendChild(renderer.domElement);
-  //   renderer.setSize(window.innerWidth, window.innerHeight);
-  //   this.renderer = renderer;
+  componentDidMount() {
+    const renderer = new THREE.WebGLRenderer();
+    document.body.appendChild(renderer.domElement);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer = renderer;
 
-  //   this.createObject();
-  // }
+    this.createObject();
+  }
 
-  // createObject() {
-  //   //STATES IMPORTED
-  //   let {
-  //     sizeValue,
-  //     color,
-  //     vertices,
-  //     lightsColor,
-  //     middleBulbLum,
-  //     topBulbLum,
-  //     bottomBulbLum,
-  //   } = this.state;
+  createObject() {
+    //STATES IMPORTED
+    let {
+      sizeValue,
+      color,
+      vertices,
+      lightsColor,
+      middleBulbLum,
+      topBulbLum,
+      bottomBulbLum,
+    } = this.state;
 
-    // let scene = new THREE.Scene();
+    let scene = new THREE.Scene();
 
     //CAMERA
     let camera = new THREE.PerspectiveCamera(
@@ -164,8 +168,10 @@ const Shape = ({sizeValue: sizeValueImport,
     //THE DISTANCE THAT THE THINGS MOVE
     let newShapeStateX = (this.state.shapeRotationX += 0.005);
     let newShapeStateY = (this.state.shapeRotationY += 0.005);
-    let newMiddleBulbDistance = (this.state.middleBulbDistance += middleBulbSpeed);
-    let newBottomBulbDistance = (this.state.bottomBulbDistance += bottomBulbSpeed);
+    let newMiddleBulbDistance = (this.state.middleBulbDistance +=
+      middleBulbSpeed);
+    let newBottomBulbDistance = (this.state.bottomBulbDistance +=
+      bottomBulbSpeed);
     let newTopBulbDistance = (this.state.topBulbDistance += topBulbSpeed);
 
     //THE PATH THAT THE BULBS TAKE RELATED TO THE DISTANCE THEY'VE MOVED.
@@ -235,12 +241,11 @@ const Shape = ({sizeValue: sizeValueImport,
 
   render() {
     return (
-      <Canvas>
-				<pointLight color={lightsColor} intensity={topBulbLum} distance={20} decay={20}/>
-				<pointLight color={lightsColor} intensity={middleBulbLum} distance={20} decay={20}/>
-				<pointLight color={lightsColor} intensity={bottomBulbLum} distance={20} decay={20}/>
-				
-			</Canvas>
+      <div
+        ref={(mount) => {
+          this.mount = mount;
+        }}
+      />
     );
   }
 }

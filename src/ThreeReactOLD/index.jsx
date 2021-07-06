@@ -107,4 +107,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("threeDiv"));
+// ReactDOM.render(<App />, document.getElementById("threeDiv"));
